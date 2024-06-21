@@ -1,17 +1,17 @@
-# dotenv-helper
+# dotenv-handler
 
-`dotenv-helper` is a lightweight utility for managing environment variables in your Node.js applications. It provides an easy way to load, access, and manage environment variables with additional features like default values and required checks.
+`dotenv-handler` is a lightweight utility for managing environment variables in your Node.js applications. It provides an easy way to load, access, and manage environment variables with additional features like default values and required checks.
 
 ## Installation
 
 ```sh
-npm install dotenv-helper
+npm install dotenv-handler
 ```
 
 or
 
 ```sh
-pnpm add dotenv-helper
+pnpm add dotenv-handler
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ pnpm add dotenv-helper
 ### Load environment variables
 
 ```js
-import { loadConfig, getConfig } from 'dotenv-helper';
+import { loadConfig, getConfig } from 'dotenv-handler';
 
 // Load configuration from .env file
 loadConfig('.env', {
@@ -57,7 +57,7 @@ loadConfig('.env', {
 ### Save environment variables to a file
 
 ```js
-import { setEnv, saveConfig } from 'dotenv-helper';
+import { setEnv, saveConfig } from 'dotenv-handler';
 
 setEnv('NEW_KEY', 'newValue');
 saveConfig('.env');

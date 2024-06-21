@@ -3,7 +3,7 @@ import * as fs from 'fs';
 
 jest.mock('fs');
 
-describe('dotenv-helper', () => {
+describe('dotenv-handler', () => {
   beforeEach(() => {
     jest.resetModules();
     process.env = {};

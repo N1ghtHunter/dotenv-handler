@@ -1,5 +1,5 @@
 {
-  "name": "dotenv-helper",
+  "name": "dotenv-handler",
   "version": "1.0.0",
   "description": "A lightweight helper for loading, setting, and saving environment variables using dotenv.",
   "main": "dist/index.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/N1ghtHunter/dotenv-helper.git"
+    "url": "https://github.com/N1ghtHunter/dotenv-handler.git"
   },
   "keywords": [
     "dotenv",
@@ -26,9 +26,9 @@
   "author": "Mazin Islam <mazinislam431@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/N1ghtHunter/dotenv-helper/issues"
+    "url": "https://github.com/N1ghtHunter/dotenv-handler/issues"
   },
-  "homepage": "https://github.com/N1ghtHunter/dotenv-helper#readme",
+  "homepage": "https://github.com/N1ghtHunter/dotenv-handler#readme",
   "devDependencies": {
     "@eslint/js": "^9.5.0",
     "@types/jest": "^29.5.12",
