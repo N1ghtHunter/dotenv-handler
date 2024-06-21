@@ -31,15 +31,19 @@ import { loadConfig, getConfig } from 'dotenv-handler';
 loadConfig('.env', {
   defaults: {
     DEFAULT_KEY: 'defaultValue',
+    DATABASE_URL: 'localhost:${PORT}/${DB_NAME}',
   },
-  required: ['PORT', 'DB_USER'],
+  required: ['PORT', 'DB_USER', 'DB_NAME'],
+  expand: true,
 });
 
 // Get configuration values
 const port = getConfig('PORT');
 const dbUser = getConfig('DB_USER');
+const dbUrl = getConfig('DATABASE_URL');
 console.log(`Server will run on port: ${port}`);
 console.log(`Database user: ${dbUser}`);
+console.log(`Database URL: ${dbUrl}`);
 ```
 
 ### Set default values for environment variables
@@ -69,6 +73,32 @@ setEnv('NEW_KEY', 'newValue');
 saveConfig('.env');
 ```
 
+### Expanding environment variables
+
+```js
+loadConfig('.env', {
+  defaults: {
+    DB_HOST: 'localhost',
+    DB_PORT: '5432',
+    DATABASE_URL: '${DB_HOST}:${DB_PORT}/database',
+  },
+  expand: true,
+  required: ['DATABASE_URL'],
+});
+
+const databaseUrl = getConfig('DATABASE_URL');
+console.log(`Database URL: ${databaseUrl}`);
+```
+
+### Silence errors on missing required variables
+
+```js
+loadConfig('.env', {
+  required: ['PORT'],
+  errorOnMissing: false,
+});
+```
+
 ## API
 
 ### `loadConfig(path: string, options?: LoadConfigOptions): void`
@@ -79,6 +109,8 @@ Loads environment variables from the specified file.
 - `options`: An object with the following properties:
   - `defaults`: An object with default values for environment variables.
   - `required`: An array of environment variables that are required.
+  - `expand`: A boolean value indicating whether to expand environment variables.
+  - `errorOnMissing`: A boolean value indicating whether to throw an error if a required environment variable is missing.
 
 ### `getConfig(key: string): string | undefined`
 

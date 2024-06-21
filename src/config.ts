@@ -16,8 +16,29 @@ export const loadConfig = (envFilePath: string = '.env', options: ConfigOptions 
     setDefaults(options.defaults);
   }
 
+  if (options.expand) {
+    expandConfig();
+  }
+
   const missingKeys = validateConfig(config, options.required || []);
   handleMissingKeys(missingKeys, options);
+};
+
+const expandConfig = (): void => {
+  for (const key in config) {
+    if (Object.prototype.hasOwnProperty.call(config, key)) {
+      config[key] = expandVariable(config[key]);
+    }
+  }
+};
+
+const expandVariable = (value: string): string => {
+  return value.replace(/\${(\w+)}/g, (_, name) => {
+    if (name in config) {
+      return config[name];
+    }
+    return '';
+  });
 };
 
 export const setDefaults = (defaults: Config): void => {
@@ -41,7 +62,7 @@ const validateConfig = (config: Config, required: string[]): string[] => {
 };
 
 const handleMissingKeys = (missingKeys: string[], options: ConfigOptions): void => {
-  const { errorOnMissing = true } = options; // Default errorOnMissing to true if not provided
+  const { errorOnMissing = true } = options;
   if (missingKeys.length > 0) {
     const message = `Missing required environment variables: ${missingKeys.join(', ')}`;
     if (errorOnMissing) throw new Error(message);

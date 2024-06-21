@@ -58,4 +58,23 @@ describe('Config', () => {
     loadConfig('.env.test');
     expect(getConfig('NEW_KEY')).toBe('newValue');
   });
+
+  it('expands environment variables', () => {
+    loadConfig('.env.test', { expand: true });
+
+    setEnv('EXPAND_KEY', 'expanded');
+    setEnv('EXPANDED_KEY', '${EXPAND_KEY}/key');
+
+    saveConfig('.env.test');
+
+    loadConfig('.env.test', {
+      required: ['EXPANDED_NEW_KEY'],
+      expand: true,
+      defaults: { EXPANDED_NEW_KEY: '${EXPANDED_KEY}:DEFAULT' },
+    });
+
+    expect(getConfig('EXPAND_KEY')).toBe('expanded');
+    expect(getConfig('EXPANDED_KEY')).toBe('expanded/key');
+    expect(getConfig('EXPANDED_NEW_KEY')).toBe('expanded/key:DEFAULT');
+  });
 });

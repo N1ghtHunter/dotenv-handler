@@ -6,4 +6,5 @@ export interface ConfigOptions {
   defaults?: Config;
   required?: string[];
   errorOnMissing?: boolean;
+  expand?: boolean;
 }
