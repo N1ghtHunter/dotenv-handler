@@ -2,6 +2,12 @@
 
 `dotenv-handler` is a lightweight utility for managing environment variables in your Node.js applications. It provides an easy way to load, access, and manage environment variables with additional features like default values and required checks.
 
+<p align="center">
+  <img src="https://img.shields.io/npm/dt/dotenv-handler" alt="NPM Downloads">
+  <img src="https://img.shields.io/npm/v/dotenv-handler" alt="NPM Version">
+  <img src="https://img.shields.io/npm/l/dotenv-handler" alt="NPM License">
+</p>
+
 ## Installation
 
 ```sh
