@@ -14,12 +14,16 @@ samples/
 docs/
 doc/
 .vscode/
+jest.config.js
 .editorconfig
+.eslint.config.mjs
 .eslintrc
 .eslintrc.js
 .eslintrc.json
 .prettierrc
 .prettierrc.js
 .prettierrc.json
+tsconfig.json
+CONDUCT.md
 build/
 dist/
