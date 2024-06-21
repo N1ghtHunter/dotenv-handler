@@ -5,7 +5,7 @@
 <p align="center">
   <img src="https://img.shields.io/npm/dt/dotenv-handler" alt="NPM Downloads">
   <img src="https://img.shields.io/npm/v/dotenv-handler" alt="NPM Version">
-  <img src="https://img.shields.io/npm/l/dotenv-handler" alt="NPM License">
+  <img src="https://img.shields.io/github/license/N1ghtHunter/dotenv-handler" alt="GITHUB License">
 </p>
 
 ## Installation
