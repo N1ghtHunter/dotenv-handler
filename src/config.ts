@@ -16,9 +16,8 @@ export const loadConfig = (envFilePath: string = '.env', options: ConfigOptions 
     setDefaults(options.defaults);
   }
 
-  if (options.required) {
-    validateConfig(config, options.required);
-  }
+  const missingKeys = validateConfig(config, options.required || []);
+  handleMissingKeys(missingKeys, options);
 };
 
 export const setDefaults = (defaults: Config): void => {
@@ -37,9 +36,15 @@ export const saveConfig = (filePath: string = '.env'): void => {
   saveEnv(filePath);
 };
 
-const validateConfig = (config: Config, required: string[]): void => {
-  const missingKeys = required.filter(key => !config[key]);
+const validateConfig = (config: Config, required: string[]): string[] => {
+  return required.filter(key => !config[key]);
+};
+
+const handleMissingKeys = (missingKeys: string[], options: ConfigOptions): void => {
+  const { errorOnMissing = true } = options; // Default errorOnMissing to true if not provided
   if (missingKeys.length > 0) {
-    throw new Error(`Missing required environment variables: ${missingKeys.join(', ')}`);
+    const message = `Missing required environment variables: ${missingKeys.join(', ')}`;
+    if (errorOnMissing) throw new Error(message);
+    else console.warn(message);
   }
 };
