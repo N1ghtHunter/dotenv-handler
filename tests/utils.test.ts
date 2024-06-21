@@ -1,4 +1,4 @@
-import { loadEnv, getEnv, setEnv, saveEnv } from '../src/index';
+import { loadEnv, getEnv, setEnv, saveEnv } from '../src/utils';
 import * as fs from 'fs';
 
 jest.mock('fs');
