@@ -24,9 +24,9 @@ import { loadConfig, getConfig } from 'dotenv-handler';
 // Load configuration from .env file
 loadConfig('.env', {
   defaults: {
-    DEFAULT_KEY: 'defaultValue'
+    DEFAULT_KEY: 'defaultValue',
   },
-  required: ['PORT', 'DB_USER']
+  required: ['PORT', 'DB_USER'],
 });
 
 // Get configuration values
@@ -41,8 +41,8 @@ console.log(`Database user: ${dbUser}`);
 ```js
 loadConfig('.env', {
   defaults: {
-    DEFAULT_KEY: 'defaultValue'
-  }
+    DEFAULT_KEY: 'defaultValue',
+  },
 });
 ```
 
@@ -50,7 +50,7 @@ loadConfig('.env', {
 
 ```js
 loadConfig('.env', {
-  required: ['PORT', 'DB_USER']
+  required: ['PORT', 'DB_USER'],
 });
 ```
 
@@ -95,4 +95,4 @@ Saves the current environment variables to the specified file.
 
 ## License
 
-MIT
+[MIT](https://choosealicense.com/licenses/mit/)
