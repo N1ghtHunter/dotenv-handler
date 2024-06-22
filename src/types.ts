@@ -8,4 +8,5 @@ export interface ConfigOptions {
   errorOnMissing?: boolean;
   expand?: boolean;
   validate?: (config: Config) => Config;
+  transformations?: Record<string, (value: string) => string>;
 }

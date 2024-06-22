@@ -133,4 +133,24 @@ describe('Config', () => {
       'Missing required environment variables: MISSING_KEY',
     );
   });
+
+  it('does not throw an error if all required keys are present', () => {
+    loadConfig('.env.test', { required: ['PORT', 'DB_USER', 'DB_PASSWORD'] });
+
+    expect(getConfig('PORT')).toBe('3000');
+    expect(getConfig('DB_USER')).toBe('testuser');
+    expect(getConfig('DB_PASSWORD')).toBe('testpassword');
+  });
+
+  it('applies transformations to configuration values', () => {
+    loadConfig('.env.test', {
+      transformations: {
+        PORT: value => (parseInt(value) + 1).toString(),
+        DB_USER: value => value.toUpperCase(),
+      },
+    });
+
+    expect(getConfig('PORT')).toBe('3001');
+    expect(getConfig('DB_USER')).toBe('TESTUSER');
+  });
 });

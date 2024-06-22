@@ -32,6 +32,10 @@ export const loadConfig = (envFilePath: string = '.env', options: ConfigOptions 
       }
     }
   }
+
+  if (options.transformations) {
+    applyTransformations(config, options.transformations);
+  }
 };
 
 const expandConfig = (): void => {
@@ -56,4 +60,12 @@ export const getConfig = (key: string): string | undefined => {
 
 export const saveConfig = (filePath: string = '.env'): void => {
   saveEnv(filePath);
+};
+
+const applyTransformations = (config: Config, transformations: Record<string, (value: string) => string>): void => {
+  for (const key in transformations) {
+    if (config[key]) {
+      config[key] = transformations[key](config[key]);
+    }
+  }
 };
