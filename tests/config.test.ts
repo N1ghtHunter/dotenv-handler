@@ -44,6 +44,14 @@ describe('Config', () => {
     expect(getConfig('DEFAULT_KEY')).toBe('defaultValue');
   });
 
+  it('loads configuration from dotenv options', () => {
+    loadConfig({ path: '.env.test' }, { required: ['PORT', 'DB_USER', 'DB_PASSWORD'] });
+
+    expect(getConfig('PORT')).toBe('5000');
+    expect(getConfig('DB_USER')).toBe('testuser');
+    expect(getConfig('DB_PASSWORD')).toBe('testpassword');
+  });
+
   it('validates required configuration keys', () => {
     expect(() => loadConfig('.env.test', { required: ['MISSING_KEY'] })).toThrow(
       'Missing required environment variables: MISSING_KEY',

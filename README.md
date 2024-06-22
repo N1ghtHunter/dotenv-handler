@@ -168,13 +168,26 @@ const port = getConfig('PORT');
 console.log(`Server will run on port: ${port}`);
 ```
 
+### Use dotenv config object
+
+```js
+import { loadConfig } from 'dotenv-handler';
+
+loadConfig({ path: '.env.test' }, { required: ['PORT', 'DB_USER'] });
+
+const port = getConfig('PORT');
+const dbUser = getConfig('DB_USER');
+console.log(`Server will run on port: ${port}`);
+console.log(`Database user: ${dbUser}`);
+```
+
 ## API
 
-### `loadConfig(path: string, options?: LoadConfigOptions): void`
+### `loadConfig(envFilePathOrOptions: string | DotenvConfigOptions, options?: LoadConfigOptions): void`
 
 Loads environment variables from the specified file.
 
-- `path`: Path to the file containing environment variables.
+- `envFilePathOrOptions`: Path to the file where environment variables are stored or a dotEnv config object.
 - `options`: An object with the following properties:
   - `defaults`: An object with default values for environment variables.
   - `required`: An array of environment variables that are required.

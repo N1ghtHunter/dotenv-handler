@@ -46,3 +46,22 @@ describe('dotenv-handler', () => {
     );
   });
 });
+
+describe('dotEnvConfig', () => {
+  it('should load environment variables from a given file path', () => {
+    //  write to a file and read from it
+    fs.writeFileSync('.env', 'TEST_VAR=123\nANOTHER_VAR=456');
+    loadEnv('.env');
+    expect(getEnv('TEST_VAR')).toBe('123');
+    expect(getEnv('ANOTHER_VAR')).toBe('456');
+    fs.unlinkSync('.env');
+  });
+
+  it('should load environment variables from a given config object', () => {
+    fs.writeFileSync('.env', 'TEST_VAR=123\nANOTHER_VAR=456');
+    loadEnv({ path: '.env', encoding: 'utf8' });
+    expect(getEnv('TEST_VAR')).toBe('123');
+    expect(getEnv('ANOTHER_VAR')).toBe('456');
+    fs.unlinkSync('.env');
+  });
+});
