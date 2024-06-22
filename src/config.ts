@@ -1,5 +1,6 @@
 import { loadEnv, saveEnv } from './utils';
 import { Config, ConfigOptions } from './types';
+import { validateConfig, handleMissingKeys, expandVariable } from './validators';
 
 const config: Config = {};
 
@@ -36,18 +37,9 @@ export const loadConfig = (envFilePath: string = '.env', options: ConfigOptions 
 const expandConfig = (): void => {
   for (const key in config) {
     if (Object.prototype.hasOwnProperty.call(config, key)) {
-      config[key] = expandVariable(config[key]);
+      config[key] = expandVariable(config[key], config);
     }
   }
-};
-
-const expandVariable = (value: string): string => {
-  return value.replace(/\${(\w+)}/g, (_, name) => {
-    if (name in config) {
-      return config[name];
-    }
-    return '';
-  });
 };
 
 export const setDefaults = (defaults: Config): void => {
@@ -64,17 +56,4 @@ export const getConfig = (key: string): string | undefined => {
 
 export const saveConfig = (filePath: string = '.env'): void => {
   saveEnv(filePath);
-};
-
-const validateConfig = (config: Config, required: string[]): string[] => {
-  return required.filter(key => !config[key]);
-};
-
-const handleMissingKeys = (missingKeys: string[], options: ConfigOptions): void => {
-  const { errorOnMissing = true } = options;
-  if (missingKeys.length > 0) {
-    const message = `Missing required environment variables: ${missingKeys.join(', ')}`;
-    if (errorOnMissing) throw new Error(message);
-    else console.warn(message);
-  }
 };
