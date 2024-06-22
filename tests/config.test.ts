@@ -77,4 +77,60 @@ describe('Config', () => {
     expect(getConfig('EXPANDED_KEY')).toBe('expanded/key');
     expect(getConfig('EXPANDED_NEW_KEY')).toBe('expanded/key:DEFAULT');
   });
+
+  it('fails validation for missing API_KEY', () => {
+    saveConfig('.env.test');
+
+    expect(() => {
+      loadConfig('.env.test', {
+        validate: config => {
+          if (!config.API_KEY) {
+            throw new Error('API_KEY is required');
+          }
+          return config;
+        },
+      });
+    }).toThrow('API_KEY is required');
+  });
+
+  it('passes validation for correct configuration', () => {
+    setEnv('API_KEY', 'test');
+
+    saveConfig('.env.test');
+    loadConfig('.env.test', {
+      validate: config => {
+        if (config.PORT !== '5000') {
+          throw new Error('Invalid PORT');
+        }
+        if (!config.API_KEY) {
+          throw new Error('API_KEY is required');
+        }
+        return config;
+      },
+    });
+
+    expect(getConfig('PORT')).toBe('5000');
+    expect(getConfig('API_KEY')).not.toBeUndefined();
+  });
+
+  it('fails validation for incorrect PORT', () => {
+    setEnv('PORT', '3000');
+    saveConfig('.env.test');
+    expect(() => {
+      loadConfig('.env.test', {
+        validate: config => {
+          if (config.PORT !== '5000') {
+            throw new Error('Invalid PORT');
+          }
+          return config;
+        },
+      });
+    }).toThrow('Invalid PORT');
+  });
+
+  it('throws an error if a required key is missing', () => {
+    expect(() => loadConfig('.env.test', { required: ['MISSING_KEY'] })).toThrow(
+      'Missing required environment variables: MISSING_KEY',
+    );
+  });
 });
