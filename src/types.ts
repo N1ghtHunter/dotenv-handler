@@ -7,4 +7,5 @@ export interface ConfigOptions {
   required?: string[];
   errorOnMissing?: boolean;
   expand?: boolean;
+  validate?: (config: Config) => Config;
 }

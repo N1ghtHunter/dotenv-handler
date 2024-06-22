@@ -22,6 +22,15 @@ export const loadConfig = (envFilePath: string = '.env', options: ConfigOptions 
 
   const missingKeys = validateConfig(config, options.required || []);
   handleMissingKeys(missingKeys, options);
+
+  if (options.validate) {
+    const validatedConfig = options.validate(config);
+    for (const key in validatedConfig) {
+      if (Object.prototype.hasOwnProperty.call(validatedConfig, key)) {
+        config[key] = validatedConfig[key];
+      }
+    }
+  }
 };
 
 const expandConfig = (): void => {
