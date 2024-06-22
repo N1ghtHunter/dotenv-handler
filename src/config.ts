@@ -1,11 +1,10 @@
 import { loadEnv, saveEnv } from './utils';
-import { Config, ConfigOptions } from './types';
+import { Config, ConfigOptions, EnvConfig } from './types';
 import { validateConfig, handleMissingKeys, expandVariable } from './validators';
 
 const config: Config = {};
-
-export const loadConfig = (envFilePath: string = '.env', options: ConfigOptions = {}): void => {
-  loadEnv(envFilePath);
+export const loadConfig = (envFilePathOrOptions: EnvConfig = '.env', options: ConfigOptions = {}): void => {
+  loadEnv(envFilePathOrOptions);
 
   for (const key in process.env) {
     if (Object.prototype.hasOwnProperty.call(process.env, key)) {

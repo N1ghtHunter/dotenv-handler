@@ -1,13 +1,17 @@
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
-
-export function loadEnv(filePath: string = '.env'): void {
-  const envPath = path.resolve(filePath);
-  if (!fs.existsSync(envPath)) {
-    throw new Error(`The file ${filePath} does not exist`);
+import { EnvConfig } from './types';
+export function loadEnv(envConfig: EnvConfig): void {
+  if (typeof envConfig === 'string') {
+    const envPath = path.resolve(envConfig);
+    if (!fs.existsSync(envPath)) {
+      throw new Error(`The file ${envConfig} does not exist`);
+    }
+    dotenv.config({ path: envPath });
+  } else {
+    dotenv.config(envConfig);
   }
-  dotenv.config({ path: envPath });
 }
 
 export function getEnv(key: string): string | undefined {

@@ -1,3 +1,7 @@
+import { config as dotenvConfig } from 'dotenv';
+
+type DotenvConfigOptions = Parameters<typeof dotenvConfig>[0];
+export type EnvConfig = string | DotenvConfigOptions;
 export interface Config {
   [key: string]: string;
 }
