@@ -28,7 +28,9 @@ describe('handleMissingKeys', () => {
   it('should throw an error if errorOnMissing is true and there are missing keys', () => {
     const missingKeys = ['key1', 'key2'];
     const options = {
-      errorOnMissing: true,
+      onValidationError: (errors: string[]) => {
+        throw new Error(errors.join(', '));
+      },
     };
     expect(() => {
       handleMissingKeys(missingKeys, options);
@@ -37,9 +39,7 @@ describe('handleMissingKeys', () => {
 
   it('should log a warning message if errorOnMissing is false and there are missing keys', () => {
     const missingKeys = ['key1', 'key2'];
-    const options = {
-      errorOnMissing: false,
-    };
+    const options = {};
     const consoleWarnSpy = jest.spyOn(console, 'warn');
     handleMissingKeys(missingKeys, options);
     expect(consoleWarnSpy).toHaveBeenCalledWith('Missing required environment variables: key1, key2');
@@ -49,7 +49,9 @@ describe('handleMissingKeys', () => {
   it('should not throw an error or log a warning message if there are no missing keys', () => {
     const missingKeys = [] as string[];
     const options = {
-      errorOnMissing: true,
+      onValidationError: (errors: string[]) => {
+        throw new Error(errors.join(', '));
+      },
     };
     const consoleWarnSpy = jest.spyOn(console, 'warn');
     handleMissingKeys(missingKeys, options);
