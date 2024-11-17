@@ -1,7 +1,7 @@
 import { config as dotenvConfig } from 'dotenv';
 
 type DotenvConfigOptions = Parameters<typeof dotenvConfig>[0];
-export type EnvConfig = string | DotenvConfigOptions;
+export type EnvConfig = string | (Omit<DotenvConfigOptions, 'path'> & { path: string }) | undefined;
 
 export type Config = Record<string, string>;
 

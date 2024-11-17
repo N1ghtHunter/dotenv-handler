@@ -8,34 +8,58 @@ class ConfigManager<T extends ConfigDefinition> {
   private schema: T;
   private config: Partial<InferConfigDefinition<T>> = {};
   private onValidationError?: (errors: string[]) => void;
+  private NODE_ENV: string = process.env.NODE_ENV || 'development';
   constructor(
-    envPath: string,
+    envConfig: EnvConfig,
     {
       schema,
       onValidationError,
+      detectNodeEnv = false,
     }: {
       schema: T;
-      validate?: (config: InferConfigDefinition<T>) => InferConfigDefinition<T>;
+      detectNodeEnv?: boolean;
       onValidationError?: (errors: string[]) => void;
     },
   ) {
     this.schema = schema;
     this.onValidationError = onValidationError;
-    this.loadEnv(envPath);
+    this.loadEnv(envConfig, detectNodeEnv);
     this.initializeConfig();
     this.applyTransformations();
   }
 
-  private loadEnv(envConfig: EnvConfig): void {
-    if (typeof envConfig === 'string') {
-      const envPath = path.resolve(envConfig);
-      if (!fs.existsSync(envPath)) {
-        throw new Error(`The file ${envConfig} does not exist`);
-      }
-      dotenv.config({ path: envPath });
-    } else {
-      dotenv.config(envConfig);
+  private getEnvPath(envConfig: EnvConfig): string {
+    if (!envConfig) {
+      return process.cwd();
     }
+
+    if (typeof envConfig === 'string') {
+      return path.resolve(envConfig);
+    }
+
+    return path.resolve(envConfig.path);
+  }
+
+  private validateEnvFile(filePath: string): void {
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Environment file not found: ${filePath}`);
+    }
+
+    const validExtensionsRegex = /\.env(\.[a-zA-Z]+)?$/;
+    const fileExt = path.extname(filePath);
+    if (!validExtensionsRegex.test(fileExt)) {
+      throw new Error(`Invalid environment file extension: ${fileExt}`);
+    }
+  }
+
+  private loadEnv(envConfig?: EnvConfig, detectNodeEnv = false): void {
+    const basePath = this.getEnvPath(envConfig);
+    const envPath = detectNodeEnv ? `${basePath}.${this.NODE_ENV}` : basePath;
+
+    this.validateEnvFile(envPath);
+
+    const config = typeof envConfig === 'object' ? envConfig : { path: envPath };
+    dotenv.config(config);
   }
 
   private initializeConfig() {
@@ -124,26 +148,3 @@ class ConfigManager<T extends ConfigDefinition> {
     }
   }
 }
-
-// Define a helper function to ensure correct typing
-// function defineConfig<T extends ConfigDefinition>(config: T): T {
-//   return config;
-// }
-
-// // Use the helper function to define the schema
-// const configSchema = defineConfig({
-//   PORT: { type: 'number', required: true, default: '3000', transform: value => Number(value) },
-//   DB_USER: { type: 'string', required: true },
-//   ENABLE_LOGS: { type: 'boolean', default: false },
-// });
-
-// Create an instance of ConfigManager
-const configManager = new ConfigManager('.env', {
-  schema: {
-    PORT: { type: 'number', required: true, default: '3000', transform: value => Number(value) },
-    DB_USER: { type: 'string', required: true },
-    ENABLE_LOGS: { type: 'boolean', default: false },
-  },
-});
-
-configManager.getValue('PORT');
